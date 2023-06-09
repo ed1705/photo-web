@@ -10,21 +10,33 @@ function Image({ className, img }) {
     setHovered((prev) => !prev);
   }
 
+  function heartIcon() {
+    if (img.isFavorite) {
+      return (
+        <i
+          className="ri-heart-fill favorite"
+          onClick={() => toggleFavorite(img.id)}
+        ></i>
+      );
+    } else if (hovered) {
+      return (
+        <i
+          className="ri-heart-line favorite"
+          onClick={() => toggleFavorite(img.id)}
+        ></i>
+      );
+    }
+  }
+
+  const cartIcon = hovered && <i className="ri-add-circle-line cart"></i>;
+
   return (
     <div
       className={`${className} image-container`}
       onMouseEnter={handleHover}
       onMouseLeave={handleHover}
     >
-      {hovered && (
-        <>
-          <i
-            onClick={() => toggleFavorite(img.id)}
-            className="ri-heart-line favorite"
-          ></i>
-          <i className="ri-add-circle-line cart"></i>
-        </>
-      )}
+      {heartIcon()} {cartIcon}
       <img src={img.url} className="image-grid" />
     </div>
   );
