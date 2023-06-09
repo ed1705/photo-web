@@ -3,7 +3,6 @@ const AppContext = React.createContext();
 
 function AppContextProvider({ children }) {
   const [allPhotos, setAllPhotos] = useState([]);
-  const [apiData, setApiData] = useState();
 
   const fetchUserData = () => {
     fetch(
@@ -13,7 +12,7 @@ function AppContextProvider({ children }) {
         return response.json();
       })
       .then((data) => {
-        setApiData(data);
+        setAllPhotos(data);
       });
   };
 
@@ -21,8 +20,19 @@ function AppContextProvider({ children }) {
     fetchUserData();
   }, []);
 
+  function toggleFavorite(id) {
+    const updatedArr = allPhotos.map((photo) => {
+      if (photo.id === id) {
+        console.log(id);
+        console.log(!photo.isFavorite);
+        return { ...photo, isFavorite: !photo.isFavorite };
+      }
+      return photo;
+    });
+    setAllPhotos(updatedArr);
+  }
   return (
-    <AppContext.Provider value={{ allPhotos, apiData }}>
+    <AppContext.Provider value={{ allPhotos, toggleFavorite }}>
       {children}
     </AppContext.Provider>
   );
