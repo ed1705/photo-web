@@ -1,8 +1,10 @@
 import React, { useState, useContext } from "react";
+import PropTypes from "prop-types";
 import { AppContext } from "../utils/appContext";
 
 function Image({ className, img }) {
-  const { toggleFavorite } = useContext(AppContext);
+  const { toggleFavorite, cartImage, cartItems, setCartItems, removeFromCart } =
+    useContext(AppContext);
 
   const [hovered, setHovered] = useState(false);
 
@@ -28,7 +30,23 @@ function Image({ className, img }) {
     }
   }
 
-  const cartIcon = hovered && <i className="ri-add-circle-line cart"></i>;
+  function cartIcons() {
+    if (cartItems.some((e) => e.id === img.id)) {
+      return (
+        <i
+          onClick={() => removeFromCart(img.id)}
+          className="ri-shopping-cart-fill cart"
+        ></i>
+      );
+    } else if (hovered) {
+      return (
+        <i
+          onClick={() => cartImage(img)}
+          className="ri-add-circle-line cart"
+        ></i>
+      );
+    }
+  }
 
   return (
     <div
@@ -36,10 +54,20 @@ function Image({ className, img }) {
       onMouseEnter={handleHover}
       onMouseLeave={handleHover}
     >
-      {heartIcon()} {cartIcon}
+      {heartIcon()}
+      {cartIcons()}
       <img src={img.url} className="image-grid" />
     </div>
   );
 }
+
+Image.propTypes = {
+  className: PropTypes.string,
+  img: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    url: PropTypes.string.isRequired,
+    isFavorite: PropTypes.bool,
+  }),
+};
 
 export default Image;
