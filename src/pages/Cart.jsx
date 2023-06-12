@@ -1,14 +1,27 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { AppContext } from "../utils/appContext";
 import CartItem from "../components/CartItem";
 
 function Cart() {
-  const { cartItems } = useContext(AppContext);
+  const [buttonText, setButtonText] = useState("Place Order");
+  const { cartItems, removeAllCartItems } = useContext(AppContext);
   const cartItemElements = cartItems.map((item) => (
     <CartItem key={item.id} item={item} />
   ));
 
+  console.log(cartItemElements);
+
   const totalCost = cartItems.length * 5.99;
+
+  function placeOrder() {
+    setButtonText("Ordering...");
+    setTimeout(() => {
+      setButtonText("Place Order");
+      console.log("order placed");
+      removeAllCartItems();
+    }, 3000);
+  }
+
   return (
     <main className="cart-page">
       <h1>Check out</h1>
@@ -21,7 +34,9 @@ function Cart() {
         })}{" "}
       </p>
       <div className="order-button">
-        <button>Place Order</button>
+        {cartItems.length > 0 && (
+          <button onClick={placeOrder}>{buttonText}</button>
+        )}
       </div>
     </main>
   );

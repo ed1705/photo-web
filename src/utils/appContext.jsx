@@ -41,6 +41,10 @@ function AppContextProvider({ children }) {
     setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
   }
 
+  function removeAllCartItems() {
+    setCartItems((prevItems) => prevItems.filter((item) => item.id === false));
+  }
+
   return (
     <AppContext.Provider
       value={{
@@ -50,6 +54,7 @@ function AppContextProvider({ children }) {
         cartItems,
         setCartItems,
         removeFromCart,
+        removeAllCartItems,
       }}
     >
       {children}
